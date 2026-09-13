@@ -1,1 +1,639 @@
-<!doctype html><meta charset="utf-8"><title>Sales Desk</title><p>First publish pending…</p>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%231d6fa5%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2234%22%20width%3D%229%22%20height%3D%2218%22%20fill%3D%22%23fff%22%2F%3E%3Crect%20x%3D%2227%22%20y%3D%2224%22%20width%3D%229%22%20height%3D%2228%22%20fill%3D%22%23d4a017%22%2F%3E%3Crect%20x%3D%2242%22%20y%3D%2214%22%20width%3D%229%22%20height%3D%2238%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E">
+<title>Lumbr & Tom Marsh Sales Desk</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f3f3ef;
+    --surface: #ffffff;
+    --surface-2: #f8f8f5;
+    --ink: #171614;
+    --ink-2: #4f4c45;
+    --muted: #837e74;
+    --line: #e3e1d9;
+    --line-2: #cfccc2;
+    --lumbr: #d4a017;
+    --lumbr-text: #8f6a09;
+    --tmf: #1d6fa5;
+    --tmf-text: #1a5f8d;
+    --good: #0ca30c;
+    --warn: #c98500;
+    --crit: #d03b3b;
+    --grid: #ebe9e2;
+    --tip-bg: #171614;
+    --tip-ink: #f6f4ee;
+    --focus: #1d6fa5;
+    --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #151513;
+      --surface: #1e1d1a;
+      --surface-2: #26251f;
+      --ink: #f1eee6;
+      --ink-2: #c8c3b7;
+      --muted: #8f8a7e;
+      --line: #33312b;
+      --line-2: #46433b;
+      --lumbr: #e2b02c;
+      --lumbr-text: #e2b02c;
+      --tmf: #3f90c8;
+      --tmf-text: #6fb0dc;
+      --good: #2fbf2f;
+      --warn: #e2a11a;
+      --crit: #e25a5a;
+      --grid: #2b2a25;
+      --tip-bg: #f1eee6;
+      --tip-ink: #171614;
+      --focus: #6fb0dc;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #151513;
+    --surface: #1e1d1a;
+    --surface-2: #26251f;
+    --ink: #f1eee6;
+    --ink-2: #c8c3b7;
+    --muted: #8f8a7e;
+    --line: #33312b;
+    --line-2: #46433b;
+    --lumbr: #e2b02c;
+    --lumbr-text: #e2b02c;
+    --tmf: #3f90c8;
+    --tmf-text: #6fb0dc;
+    --good: #2fbf2f;
+    --warn: #e2a11a;
+    --crit: #e25a5a;
+    --grid: #2b2a25;
+    --tip-bg: #f1eee6;
+    --tip-ink: #171614;
+    --focus: #6fb0dc;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 var(--sans); }
+  .wrap { max-width: 1440px; margin: 0 auto; padding: 20px 22px 60px; }
+  a { color: var(--tmf-text); }
+  button, select, input { font: inherit; color: inherit; }
+  button:focus-visible, select:focus-visible, input:focus-visible, tr:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  /* ---- masthead ---- */
+  .mast { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .mast h1 { margin: 0; font: 600 30px/1.05 var(--serif); font-variation-settings: "opsz" 60; letter-spacing: -.01em; text-wrap: balance; }
+  .mast .sub { color: var(--muted); margin-top: 6px; font-size: 13px; }
+  .mast .sub b { color: var(--ink-2); font-weight: 500; }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .seg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 8px; overflow: hidden; background: var(--surface); }
+  .seg button { border: 0; background: transparent; padding: 7px 12px; min-height: 34px; cursor: pointer; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button.on { background: var(--ink); color: var(--bg); }
+  .seg button.on .dot { box-shadow: 0 0 0 1.5px var(--bg); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .dot.lumbr { background: var(--lumbr); }
+  .dot.tmf { background: var(--tmf); }
+  .btn { border: 1px solid var(--line-2); background: var(--surface); border-radius: 8px; padding: 7px 12px; min-height: 34px; cursor: pointer; color: var(--ink-2); white-space: nowrap; }
+  .btn:hover { background: var(--surface-2); }
+
+  /* ---- KPIs ---- */
+  .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin: 18px 0 14px; }
+  .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 11px; min-width: 0; }
+  .kpi .label { font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+  .kpi .value { font-size: 26px; font-weight: 600; line-height: 1.1; margin-top: 4px; white-space: nowrap; }
+  .kpi .value small { font-size: 13px; font-weight: 500; color: var(--ink-2); margin-left: 4px; }
+  .kpi .delta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi .delta.up { color: var(--good); }
+  .kpi .delta.down { color: var(--crit); }
+  .kpi.lumbr { border-top: 3px solid var(--lumbr); }
+  .kpi.tmf { border-top: 3px solid var(--tmf); }
+
+  /* ---- panels ---- */
+  .grid { display: grid; gap: 12px; margin-bottom: 12px; }
+  .grid.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid.c2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px 12px; min-width: 0; }
+  .panel h2 { margin: 0; font: 600 17px/1.2 var(--serif); font-variation-settings: "opsz" 24; }
+  .panel .hd { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .panel .hint { color: var(--muted); font-size: 12px; }
+  .legend { display: flex; gap: 12px; font-size: 12px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .legend i.lumbr { background: var(--lumbr); }
+  .legend i.tmf { background: var(--tmf); }
+  svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
+  svg.chart text { font-family: var(--sans); fill: var(--ink-2); }
+  svg.chart .axis text { font-size: 11px; fill: var(--muted); }
+  svg.chart .gridline { stroke: var(--grid); stroke-width: 1; }
+  svg.chart .baseline { stroke: var(--line-2); stroke-width: 1; }
+  svg.chart .bar { cursor: default; }
+  svg.chart .bar.lumbr { fill: var(--lumbr); }
+  svg.chart .bar.tmf { fill: var(--tmf); }
+  svg.chart .bar.neutral { fill: var(--ink-2); opacity: .75; }
+  svg.chart .bar:hover { opacity: .8; }
+  svg.chart .lbl { font-size: 11.5px; fill: var(--ink-2); }
+  svg.chart .val { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  svg.chart .total { font-size: 10.5px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .empty { color: var(--muted); font-size: 13px; padding: 20px 0; text-align: center; }
+
+  /* ---- tooltip ---- */
+  .tip { position: fixed; z-index: 50; pointer-events: none; background: var(--tip-bg); color: var(--tip-ink); padding: 7px 10px; border-radius: 7px; font-size: 12px; line-height: 1.4; max-width: 280px; box-shadow: 0 6px 20px rgba(0,0,0,.18); display: none; }
+  .tip b { font-weight: 600; }
+
+  /* ---- table ---- */
+  .tablebar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .tablebar input { flex: 1; min-width: 200px; border: 1px solid var(--line-2); background: var(--surface); border-radius: 8px; padding: 7px 10px; min-height: 34px; }
+  .tablebar .count { color: var(--muted); font-size: 12.5px; }
+  .tscroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 980px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; cursor: pointer; user-select: none; background: var(--surface-2); position: sticky; top: 0; z-index: 1; }
+  th.sorted { color: var(--ink); }
+  th .arrow { opacity: .6; margin-left: 3px; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.mono { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  td.date { white-space: nowrap; }
+  td.prod { min-width: 300px; max-width: 520px; }
+  td.prod .t { color: var(--ink); }
+  td.prod .m { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  tr.row { cursor: pointer; }
+  tr.row:hover td { background: var(--surface-2); }
+  tr.row.open td { background: var(--surface-2); border-bottom-color: transparent; }
+  tr.detail td { background: var(--surface-2); padding: 4px 10px 14px 10px; }
+  .chip { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .03em; padding: 2px 7px; border-radius: 5px; color: #fff; white-space: nowrap; }
+  .chip.lumbr { background: var(--lumbr-text); }
+  .chip.tmf { background: var(--tmf-text); }
+  .pill { display: inline-block; font-size: 11.5px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--ink-2); white-space: nowrap; }
+  .pill.in_stock { border-color: var(--good); color: var(--good); }
+  .pill.delivered { color: var(--muted); }
+  .pill.partial { border-color: var(--warn); color: var(--warn); }
+  .pill.unpaid { border-color: var(--crit); color: var(--crit); }
+  .dgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; font-size: 13px; }
+  .dgrid dl { display: grid; grid-template-columns: 110px 1fr; gap: 3px 10px; margin: 0; }
+  .dgrid dt { color: var(--muted); }
+  .dgrid dd { margin: 0; overflow-wrap: anywhere; }
+  .dgrid ul { margin: 0; padding-left: 16px; }
+  .dgrid li { margin: 2px 0; }
+  .dgrid li small { color: var(--muted); }
+
+  .foot { margin-top: 26px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+  @media (max-width: 1100px) {
+    .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.c3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 760px) {
+    .wrap { padding: 14px 12px 40px; }
+    .mast h1 { font-size: 25px; }
+    .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .kpi .value { font-size: 22px; }
+    .grid.c3, .grid.c2 { grid-template-columns: 1fr; }
+    .controls { width: 100%; }
+    .seg { overflow-x: auto; max-width: 100%; }
+    .seg button { min-height: 38px; }
+    table { min-width: 720px; }
+    .dgrid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .bar { transition: opacity .12s; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <h1>Lumbr &amp; Tom Marsh Sales Desk</h1>
+      <div class="sub" id="sub">Loading…</div>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Period" data-filter="period">
+        <button data-value="30" type="button">30 days</button>
+        <button data-value="90" type="button" class="on">90 days</button>
+        <button data-value="all" type="button">All</button>
+      </div>
+      <div class="seg" role="group" aria-label="Brand" data-filter="brand">
+        <button data-value="all" type="button" class="on">Both</button>
+        <button data-value="lumbr" type="button"><i class="dot lumbr"></i>Lumbr</button>
+        <button data-value="tmf" type="button"><i class="dot tmf"></i>Tom Marsh</button>
+      </div>
+      <div class="seg" role="group" aria-label="Status" data-filter="status">
+        <button data-value="all" type="button" class="on">All orders</button>
+        <button data-value="live" type="button">In production</button>
+        <button data-value="delivered" type="button">Delivered</button>
+      </div>
+      <button class="btn" id="csv" type="button" title="Copies the orders currently shown as CSV">Copy CSV</button>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis" aria-live="polite"></section>
+
+  <section class="grid c2">
+    <div class="panel" style="grid-column: 1 / -1;">
+      <div class="hd"><h2>Sales over time</h2><div class="legend"><span><i class="lumbr"></i>Lumbr</span><span><i class="tmf"></i>Tom Marsh</span><span class="hint" id="timeHint"></span></div></div>
+      <div id="chartTime"></div>
+    </div>
+  </section>
+
+  <section class="grid c3">
+    <div class="panel">
+      <div class="hd"><h2>What's selling</h2><span class="hint">table style · orders and net £</span></div>
+      <div id="chartModel"></div>
+    </div>
+    <div class="panel">
+      <div class="hd"><h2>Table lengths</h2><span class="hint">orders by length band</span></div>
+      <div id="chartLength"></div>
+    </div>
+    <div class="panel">
+      <div class="hd"><h2>Where it sells</h2><span class="hint">orders by region</span></div>
+      <div id="chartRegion"></div>
+    </div>
+  </section>
+
+  <section class="grid c3">
+    <div class="panel">
+      <div class="hd"><h2>Top finishes</h2><span class="hint">from product spec</span></div>
+      <div id="chartFinish"></div>
+    </div>
+    <div class="panel">
+      <div class="hd"><h2>Order values</h2><span class="hint">net £ per order</span></div>
+      <div id="chartPrice"></div>
+    </div>
+    <div class="panel">
+      <div class="hd"><h2>Brand comparison</h2><span class="hint">selected period</span></div>
+      <div id="brandCompare"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="hd"><h2>Orders</h2><span class="hint">click a row for the full spec</span></div>
+    <div class="tablebar">
+      <input id="q" type="search" placeholder="Search product, order no., town, region, finish…" aria-label="Search orders">
+      <span class="count" id="count"></span>
+    </div>
+    <div class="tscroll">
+      <table id="tbl">
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+(() => {
+  const FEED = {"generatedAt":"2026-09-13T09:09:44.385Z","brands":{"lumbr":"Lumbr","tmf":"Tom Marsh Furniture"},"includeNames":false,"count":76,"from":"2026-06-15","to":"2026-09-12","orders":[{"key":"sage:cd456fc29ccb4ddb92205c0420343c83","brand":"tmf","source":"sage","number":"SI-1855","reference":"TM000741","date":"2026-09-12","ageDays":1,"status":"ordered","payment":"unpaid","paymentLabel":"Unpaid","net":2037.5,"gross":2445,"tax":407.5,"shipping":0,"outstanding":2445,"currency":"GBP","customer":"","place":{"town":"Sheffield","outcode":"S36","region":"Yorkshire & Humber","country":"GB"},"product":{"category":"table","model":"Balustrade pedestal","length":275,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":"Matchstick","bench":null},"productTitle":"Balustrade Pedestal Table (Size: 275cm x 110cm, Paint Colour: Matchstick, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","items":[{"title":"Balustrade Pedestal Table (Size: 275cm x 110cm, Paint Colour: Matchstick, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Balustrade pedestal","length":275,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":"Matchstick","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:1a67b64811d94244b3b098ec1397ba73","brand":"tmf","source":"sage","number":"SI-1856","reference":"TM000742","date":"2026-09-12","ageDays":1,"status":"ordered","payment":"unpaid","paymentLabel":"Unpaid","net":1820.83,"gross":2185,"tax":364.17,"shipping":0,"outstanding":2185,"currency":"GBP","customer":"","place":{"town":"Chester","outcode":"CH4","region":"North West","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":250,"width":100,"thickness":50,"finish":"Dark","breadboard":true,"colour":"Calke Green","bench":null},"productTitle":"Ibiza Pedestal Dining Table (Size: 250cm x 100cm, Paint Colour: Calke Green, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Dark, Bench: None, )","items":[{"title":"Ibiza Pedestal Dining Table (Size: 250cm x 100cm, Paint Colour: Calke Green, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Dark, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":250,"width":100,"thickness":50,"finish":"Dark","breadboard":true,"colour":"Calke Green","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11877131714825","brand":"lumbr","source":"shopify","number":"#1034","reference":"","date":"2026-09-11","ageDays":1,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1157.5,"gross":1389,"tax":231.5,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Kilmarnock","outcode":"KA3","region":"Scotland","country":"GB"},"product":{"category":"table","model":"Taper leg","length":222,"width":86,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Handmade Table — 222×86cm","items":[{"title":"Taper Handmade Table — 222×86cm","qty":1,"parsed":{"category":"table","model":"Taper leg","length":222,"width":86,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:9bca1a0629c14cb291dded4abdb97807","brand":"tmf","source":"sage","number":"SI-1854","reference":"TM000740","date":"2026-09-11","ageDays":2,"status":"ordered","payment":"unpaid","paymentLabel":"Unpaid","net":1566.66,"gross":1880,"tax":313.34,"shipping":0,"outstanding":1880,"currency":"GBP","customer":"","place":{"town":"Sowerby Bridge","outcode":"HX6","region":"Yorkshire & Humber","country":"GB"},"product":{"category":"table","model":"X-frame","length":275,"width":110,"thickness":null,"finish":"Coffee","breadboard":false,"colour":"Matte","bench":null},"productTitle":"Rustic X-Frame Metal Table (Size: 275cm x 110cm, Bench: None, Breadboard Ends: No, Metal Finish: Matte, Top Finish: Coffee, )","items":[{"title":"Rustic X-Frame Metal Table (Size: 275cm x 110cm, Bench: None, Breadboard Ends: No, Metal Finish: Matte, Top Finish: Coffee, )","qty":1,"parsed":{"category":"table","model":"X-frame","length":275,"width":110,"thickness":null,"finish":"Coffee","breadboard":false,"colour":"Matte","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:9d5dd619f93044e1ab69e44f5b758e5f","brand":"tmf","source":"sage","number":"SI-1853","reference":"","date":"2026-09-09","ageDays":4,"status":"ordered","payment":"unpaid","paymentLabel":"Unpaid","net":1483.33,"gross":1780,"tax":296.67,"shipping":85,"outstanding":1780,"currency":"GBP","customer":"","place":{"town":"Ashton hayes","outcode":"CH3","region":"North West","country":"GB"},"product":{"category":"table","model":"Pedestal","length":215,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":"Railings","bench":null},"productTitle":"Hand made dining table 215cm long x 100cm wide. The 50mm thick top with breadboard ends in \"Light\" finish supported by our \"New Pedestal\" painted in F and B \"Railings\".","items":[{"title":"Hand made dining table 215cm long x 100cm wide. The 50mm thick top with breadboard ends in \"Light\" finish supported by our \"New Pedestal\" painted in F and B \"Railings\".","qty":1,"parsed":{"category":"table","model":"Pedestal","length":215,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":"Railings","bench":null}}],"tags":[]},{"key":"shopify:11865526862089","brand":"lumbr","source":"shopify","number":"#1033","reference":"","date":"2026-09-07","ageDays":5,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1353.33,"gross":1624,"tax":270.67,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Edinburgh","outcode":"EH3","region":"Scotland","country":"GB"},"product":{"category":"table","model":"Pedestal","length":210,"width":100,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Handmade Pedestal Dining Table 210cm x 100cm in Natural Pedestal Base","items":[{"title":"Handmade Pedestal Dining Table 210cm x 100cm in Natural Pedestal Base","qty":1,"parsed":{"category":"table","model":"Pedestal","length":210,"width":100,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11864685216009","brand":"lumbr","source":"shopify","number":"#1032","reference":"","date":"2026-09-07","ageDays":5,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2528.33,"gross":3034,"tax":505.67,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Warwick","outcode":"CV34","region":"West Midlands","country":"GB"},"product":{"category":"table","model":"Eiffel","length":280,"width":105,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Eiffel Handmade Table — 280×105cm","items":[{"title":"Eiffel Handmade Table — 280×105cm","qty":1,"parsed":{"category":"table","model":"Eiffel","length":280,"width":105,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:e3876b047e804d35ab0e6faa7373b5a7","brand":"tmf","source":"sage","number":"SI-1851","reference":"Insight","date":"2026-09-07","ageDays":6,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":7400,"gross":8880,"tax":1480,"shipping":240,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Norwich","outcode":"NR7","region":"East of England","country":"GB"},"product":{"category":"commercial","model":"A-frame","length":300,"width":75,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"3000mm x 750mm Office table with \"A\" frame base. ","items":[{"title":"3000mm x 750mm Office table with \"A\" frame base. ","qty":4,"parsed":{"category":"commercial","model":"A-frame","length":300,"width":75,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"2000mm x 800mm Office table with \"A\" frame base.","qty":2,"parsed":{"category":"commercial","model":"A-frame","length":200,"width":80,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"2300mm x 500mm x 920mm High Office table with \"A\" frame base.","qty":1,"parsed":{"category":"commercial","model":"A-frame","length":230,"width":50,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:e7f02b027abc40eea9ea2534b27c768b","brand":"tmf","source":"sage","number":"SI-1852","reference":"","date":"2026-09-07","ageDays":6,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1485,"gross":1485,"tax":0,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"St Peter Port","outcode":"GY1","region":"Abroad (GG)","country":"GG"},"product":{"category":"table","model":"Box steel","length":260,"width":105,"thickness":50,"finish":"Dark","breadboard":null,"colour":null,"bench":null},"productTitle":"Hand made dining table 260cm long x 105cm wide. The 50mm thick top in \"Dark\" finish supported by steel box frame base. ","items":[{"title":"Hand made dining table 260cm long x 105cm wide. The 50mm thick top in \"Dark\" finish supported by steel box frame base. ","qty":1,"parsed":{"category":"table","model":"Box steel","length":260,"width":105,"thickness":50,"finish":"Dark","breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:0752758949144613ab3067c91943507c","brand":"tmf","source":"sage","number":"SI-1850","reference":"TM000739","date":"2026-09-06","ageDays":7,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1529.16,"gross":1835,"tax":305.84,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"London","outcode":"SE13","region":"London","country":"GB"},"product":{"category":"table","model":"Steel girder","length":250,"width":100,"thickness":null,"finish":null,"breadboard":false,"colour":null,"bench":null},"productTitle":"Steel Girder Leg Rustic Table (Size: 250cm x 100cm, Breadboard Ends: No, Leg Style: I-Shape Metal, Bench: None, )","items":[{"title":"Steel Girder Leg Rustic Table (Size: 250cm x 100cm, Breadboard Ends: No, Leg Style: I-Shape Metal, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Steel girder","length":250,"width":100,"thickness":null,"finish":null,"breadboard":false,"colour":null,"bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11858376818953","brand":"lumbr","source":"shopify","number":"#1031","reference":"","date":"2026-09-05","ageDays":7,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1215.83,"gross":1459,"tax":243.17,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Cirencester","outcode":"GL7","region":"South West","country":"GB"},"product":{"category":"table","model":"Taper leg","length":160,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Handmade Table — 160×90cm","items":[{"title":"Taper Handmade Table — 160×90cm","qty":1,"parsed":{"category":"table","model":"Taper leg","length":160,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:e58772fc42a4411eb8e279b880ea1c1e","brand":"tmf","source":"sage","number":"SI-1849","reference":"","date":"2026-09-05","ageDays":8,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2054.16,"gross":2465,"tax":410.84,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Kelso","outcode":"TD5","region":"Scotland","country":"GB"},"product":{"category":"table","model":"X-frame","length":235,"width":90,"thickness":50,"finish":"Honey","breadboard":true,"colour":null,"bench":"2 benches"},"productTitle":"Hand made dining table 235cm long x 90cm wide. The 50mm thick top with breadboard ends in \"Honey\" finish. Supported by X frame legs with black powder coat. Plus 2 x matching  benches at 115cm long each. ","items":[{"title":"Hand made dining table 235cm long x 90cm wide. The 50mm thick top with breadboard ends in \"Honey\" finish. Supported by X frame legs with black powder coat. Plus 2 x matching  benches at 115cm long each. ","qty":1,"parsed":{"category":"table","model":"X-frame","length":235,"width":90,"thickness":50,"finish":"Honey","breadboard":true,"colour":null,"bench":"2 benches"}}],"tags":[]},{"key":"shopify:11849433383177","brand":"lumbr","source":"shopify","number":"#1030","reference":"","date":"2026-09-02","ageDays":10,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1053.33,"gross":1264,"tax":210.67,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Lamberhurst","outcode":"TN3","region":"South East","country":"GB"},"product":{"category":"table","model":"Eiffel","length":180,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Eiffel Handmade Table — 180×90cm","items":[{"title":"Eiffel Handmade Table — 180×90cm","qty":1,"parsed":{"category":"table","model":"Eiffel","length":180,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"shopify:11845100863753","brand":"lumbr","source":"shopify","number":"#1029","reference":"","date":"2026-09-01","ageDays":12,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":874.16,"gross":1049,"tax":174.84,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Edinburgh","outcode":"EH1","region":"Scotland","country":"GB"},"product":{"category":"table","model":"Pedestal","length":150,"width":75,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Pedestal Handmade Table — 150×75cm","items":[{"title":"Pedestal Handmade Table — 150×75cm","qty":1,"parsed":{"category":"table","model":"Pedestal","length":150,"width":75,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:5d9bed2471a74d4398d8e8241bae668e","brand":"tmf","source":"sage","number":"SI-1848","reference":"","date":"2026-09-01","ageDays":12,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":3325,"gross":3990,"tax":665,"shipping":240,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Angus","outcode":"DD11","region":"Scotland","country":"GB"},"product":{"category":"table","model":"Farmhouse","length":250,"width":110,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Farm table 250cm x 110cm. ","items":[{"title":"Farm table 250cm x 110cm. ","qty":1,"parsed":{"category":"table","model":"Farmhouse","length":250,"width":110,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:d42b43fd5e96406bb4b3006e3a81d49f","brand":"tmf","source":"sage","number":"SI-1847","reference":"TM000738","date":"2026-08-30","ageDays":14,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2016.66,"gross":2420,"tax":403.34,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Bridgend","outcode":"CF33","region":"Wales","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":230,"width":90,"thickness":50,"finish":"Light","breadboard":false,"colour":"Purbeck Store","bench":"1x Long Bench"},"productTitle":"Design Your Own Table (Length: 230cm, Width: 90cm, Thickness: 50mm, Table Finish: Light, Base Style: Ibiza, Base Colour: Purbeck Store, Breadboard Ends: No, Matching Bench: 1x Long Bench, )","items":[{"title":"Design Your Own Table (Length: 230cm, Width: 90cm, Thickness: 50mm, Table Finish: Light, Base Style: Ibiza, Base Colour: Purbeck Store, Breadboard Ends: No, Matching Bench: 1x Long Bench, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":230,"width":90,"thickness":50,"finish":"Light","breadboard":false,"colour":"Purbeck Store","bench":"1x Long Bench"}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11834003226889","brand":"lumbr","source":"shopify","number":"#1028","reference":"","date":"2026-08-29","ageDays":15,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1224.16,"gross":1469,"tax":244.84,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Ellon","outcode":"AB41","region":"Scotland","country":"GB"},"product":{"category":"table","model":"Taper leg","length":220,"width":100,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Handmade Table — 220×100cm","items":[{"title":"Taper Handmade Table — 220×100cm","qty":1,"parsed":{"category":"table","model":"Taper leg","length":220,"width":100,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:33a15f2ce61c478994e4c9ce0faf977c","brand":"tmf","source":"sage","number":"SI-1846","reference":"TM000737","date":"2026-08-29","ageDays":15,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2404.16,"gross":2885,"tax":480.84,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Deddington","outcode":"OX15","region":"South East","country":"GB"},"product":{"category":"table","model":"Steel girder","length":250,"width":110,"thickness":null,"finish":null,"breadboard":false,"colour":null,"bench":"2x Long Benches"},"productTitle":"Steel Girder Leg Rustic Table (Size: 250cm x 110cm, Breadboard Ends: No, Leg Style: I-Shape Metal, Bench: 2x Long Benches, )","items":[{"title":"Steel Girder Leg Rustic Table (Size: 250cm x 110cm, Breadboard Ends: No, Leg Style: I-Shape Metal, Bench: 2x Long Benches, )","qty":1,"parsed":{"category":"table","model":"Steel girder","length":250,"width":110,"thickness":null,"finish":null,"breadboard":false,"colour":null,"bench":"2x Long Benches"}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11831226335497","brand":"lumbr","source":"shopify","number":"#1027","reference":"","date":"2026-08-28","ageDays":16,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1911.66,"gross":2294,"tax":382.34,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Faringdon","outcode":"SN7","region":"South West","country":"GB"},"product":{"category":"table","model":"Pedestal","length":230,"width":100,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Pedestal Handmade Table — 230×100cm","items":[{"title":"Pedestal Handmade Table — 230×100cm","qty":1,"parsed":{"category":"table","model":"Pedestal","length":230,"width":100,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:fae08756fc324e8aa4652e649601e61e","brand":"tmf","source":"sage","number":"SI-1844","reference":"","date":"2026-08-26","ageDays":18,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1208.33,"gross":1450,"tax":241.67,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"","outcode":"NG12","region":"East Midlands","country":"GB"},"product":{"category":"table","model":"A-frame","length":220,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made dining table 220cm long x 100cm wide. The 50mm thick top with breadboard ends in \"Light\" finish supported by \"A\" frame legs painted in a custom colour. ","items":[{"title":"Hand made dining table 220cm long x 100cm wide. The 50mm thick top with breadboard ends in \"Light\" finish supported by \"A\" frame legs painted in a custom colour. ","qty":1,"parsed":{"category":"table","model":"A-frame","length":220,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:673ad10202f84e328cace1cca1048a2d","brand":"tmf","source":"sage","number":"SI-1845","reference":"","date":"2026-08-26","ageDays":18,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":633.33,"gross":760,"tax":126.67,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Porthcawl","outcode":"CF36","region":"Wales","country":"GB"},"product":{"category":"coffee table","model":"A-frame","length":100,"width":80,"thickness":null,"finish":"Light","breadboard":null,"colour":null,"bench":null},"productTitle":"Hand made Coffee table 100cm x 80cm. The rustic timber top in \"Light\" finish supported by \"A\" frame legs. ","items":[{"title":"Hand made Coffee table 100cm x 80cm. The rustic timber top in \"Light\" finish supported by \"A\" frame legs. ","qty":1,"parsed":{"category":"coffee table","model":"A-frame","length":100,"width":80,"thickness":null,"finish":"Light","breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:646ed8e749ac4ad088e4d9e5e83d1ca3","brand":"tmf","source":"sage","number":"SI-1841","reference":"","date":"2026-08-25","ageDays":19,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2560,"gross":3072,"tax":512,"shipping":120,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Bridgend","outcode":"CF31","region":"Wales","country":"GB"},"product":{"category":"commercial","model":null,"length":120,"width":70,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Hand made restaurant table tops. 1200mm x 700mm","items":[{"title":"Hand made restaurant table tops. 1200mm x 700mm","qty":7,"parsed":{"category":"commercial","model":null,"length":120,"width":70,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"Hand made restaurant table tops. 600mm x 700mm","qty":6,"parsed":{"category":"commercial","model":null,"length":60,"width":70,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:c9e1e798b6084fe2b849b9094024e15c","brand":"tmf","source":"sage","number":"SI-1842","reference":"","date":"2026-08-25","ageDays":19,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1650,"gross":1980,"tax":330,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"","outcode":"SG19","region":"East of England","country":"GB"},"product":{"category":"table","model":"X-frame","length":260,"width":120,"thickness":50,"finish":"Dark","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made dining table. 260cm long x 120cm wide. The 50mm thick top with breadboard ends and no grooves where the boards meet. Dark vintage finish supported by black powder coated X frame legs. ","items":[{"title":"Hand made dining table. 260cm long x 120cm wide. The 50mm thick top with breadboard ends and no grooves where the boards meet. Dark vintage finish supported by black powder coated X frame legs. ","qty":1,"parsed":{"category":"table","model":"X-frame","length":260,"width":120,"thickness":50,"finish":"Dark","breadboard":true,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:a665218cd9d94e989db5a936b8df0890","brand":"tmf","source":"sage","number":"SI-1843","reference":"TM000735","date":"2026-08-25","ageDays":19,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1441.66,"gross":1730,"tax":288.34,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Bicester","outcode":"OX27","region":"South East","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":200,"width":92,"thickness":50,"finish":"Light","breadboard":true,"colour":"Moles Breath","bench":null},"productTitle":"Ibiza Pedestal Dining Table (Size: 200cm x 92cm, Paint Colour: Moles Breath, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","items":[{"title":"Ibiza Pedestal Dining Table (Size: 200cm x 92cm, Paint Colour: Moles Breath, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":200,"width":92,"thickness":50,"finish":"Light","breadboard":true,"colour":"Moles Breath","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:4e5ee0f27bba4ced946cebded1f005c0","brand":"tmf","source":"sage","number":"SI-1840","reference":"","date":"2026-08-24","ageDays":20,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1620.83,"gross":1945,"tax":324.17,"shipping":150,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Perth and Kinross","outcode":"FK14","region":"Scotland","country":"GB"},"product":{"category":"table","model":"Balustrade pedestal","length":230,"width":100,"thickness":40,"finish":"Medium","breadboard":null,"colour":"Off Black","bench":null},"productTitle":"Hand made Balustrade pedestal dining table 230cm long x 100cm wide. The 40mm thick top in medium finish. Base painted in F and B \"Off Black\". ","items":[{"title":"Hand made Balustrade pedestal dining table 230cm long x 100cm wide. The 40mm thick top in medium finish. Base painted in F and B \"Off Black\". ","qty":1,"parsed":{"category":"table","model":"Balustrade pedestal","length":230,"width":100,"thickness":40,"finish":"Medium","breadboard":null,"colour":"Off Black","bench":null}}],"tags":[]},{"key":"sage:2f551173c4b54accba607796f2c8479e","brand":"tmf","source":"sage","number":"SI-1839","reference":"TM000734","date":"2026-08-23","ageDays":21,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":4362.5,"gross":5235,"tax":872.5,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"COLCHESTER","outcode":"CO3","region":"East of England","country":"GB"},"product":{"category":"table","model":"Refectory","length":300,"width":120,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Solid Oak Refectory table (Size: 300cm x 120cm, )","items":[{"title":"Solid Oak Refectory table (Size: 300cm x 120cm, )","qty":1,"parsed":{"category":"table","model":"Refectory","length":300,"width":120,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11813116150025","brand":"lumbr","source":"shopify","number":"#1026","reference":"","date":"2026-08-22","ageDays":21,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1265.83,"gross":1519,"tax":253.17,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Tewkesbury","outcode":"GL20","region":"South West","country":"GB"},"product":{"category":"table","model":"Taper leg","length":190,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Handmade Table — 190×90cm","items":[{"title":"Taper Handmade Table — 190×90cm","qty":1,"parsed":{"category":"table","model":"Taper leg","length":190,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"shopify:11802515636489","brand":"lumbr","source":"shopify","number":"#1025","reference":"","date":"2026-08-19","ageDays":25,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1339.99,"gross":1608,"tax":268.01,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Norbury","outcode":"ST20","region":"West Midlands","country":"GB"},"product":{"category":"table","model":"Taper leg","length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Handmade Table","items":[{"title":"Taper Handmade Table","qty":1,"parsed":{"category":"table","model":"Taper leg","length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"235cm x 100cm taper Handmade Dining Table - mellow finish, 195cm between the legs","qty":1,"parsed":{"category":"table","model":"Taper leg","length":235,"width":100,"thickness":null,"finish":"Mellow","breadboard":null,"colour":null,"bench":null}},{"title":"Delivery and Installation","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:58a0d8e8e6dc440d9cffdffe6478371f","brand":"tmf","source":"sage","number":"SI-1837","reference":"","date":"2026-08-17","ageDays":27,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":100,"gross":120,"tax":20,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Newchurch","outcode":"PO36","region":"South East","country":"GB"},"product":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Transport costs","items":[{"title":"Transport costs","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:19f8c0db99734e71b7be077ce897beeb","brand":"tmf","source":"sage","number":"SI-1838","reference":"","date":"2026-08-17","ageDays":27,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":3070.83,"gross":3685,"tax":614.17,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Grantham","outcode":"NG31","region":"East Midlands","country":"GB"},"product":{"category":"other furniture","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Hand made bespoke media cabinet. ","items":[{"title":"Hand made bespoke media cabinet. ","qty":1,"parsed":{"category":"other furniture","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:99464817b7124c6fb8e816843432fe0b","brand":"tmf","source":"sage","number":"SI-1836","reference":"TM000733","date":"2026-08-13","ageDays":31,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2429.16,"gross":2915,"tax":485.84,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"St John's Wood","outcode":"NW8","region":"London","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":330,"width":120,"thickness":50,"finish":"Dark","breadboard":true,"colour":"Pitch Black","bench":null},"productTitle":"Ibiza Pedestal Dining Table (Size: 330cm x 120cm, Paint Colour: Pitch Black, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Dark, Bench: None, )","items":[{"title":"Ibiza Pedestal Dining Table (Size: 330cm x 120cm, Paint Colour: Pitch Black, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Dark, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":330,"width":120,"thickness":50,"finish":"Dark","breadboard":true,"colour":"Pitch Black","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11783295041801","brand":"lumbr","source":"shopify","number":"#1024","reference":"","date":"2026-08-12","ageDays":31,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1115.83,"gross":1339,"tax":223.17,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Hove","outcode":"BN3","region":"South East","country":"GB"},"product":{"category":"table","model":"Taper leg","length":220,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Handmade Table — 220×90cm","items":[{"title":"Taper Handmade Table — 220×90cm","qty":1,"parsed":{"category":"table","model":"Taper leg","length":220,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:3502da473b04416d8597afe35fc0bf6d","brand":"tmf","source":"sage","number":"SI-1833","reference":"","date":"2026-08-08","ageDays":36,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2612.49,"gross":3135,"tax":522.51,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Kirby Bellars","outcode":"LE14","region":"East Midlands","country":"GB"},"product":{"category":"table","model":null,"length":300,"width":110,"thickness":50,"finish":"Medium","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made dining table 300cm long x 110cm wide. The 50mm thick top with breadboard ends and perfect joints in medium finish. ","items":[{"title":"Hand made dining table 300cm long x 110cm wide. The 50mm thick top with breadboard ends and perfect joints in medium finish. ","qty":1,"parsed":{"category":"table","model":null,"length":300,"width":110,"thickness":50,"finish":"Medium","breadboard":true,"colour":null,"bench":null}},{"title":"Vintage sideboard painted in custom colour. ","qty":1,"parsed":{"category":"other furniture","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:523f7c740174410da3a0468f9f4454f2","brand":"tmf","source":"sage","number":"SI-1834","reference":"TM000732","date":"2026-08-08","ageDays":36,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1362.5,"gross":1635,"tax":272.5,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Newchurch","outcode":"PO36","region":"South East","country":"GB"},"product":{"category":"table","model":"X-frame","length":230,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":"Natural Base to match the top","bench":null},"productTitle":"X-Frame with Reclaimed Wood Hand Made Dining Table (Sizes: 230cm x 100cm, Thickness: 50mm, Breadboard Ends: Yes, Bench: None, Top Finish: Light, Paint Colour: Natural Base to match the top, )","items":[{"title":"X-Frame with Reclaimed Wood Hand Made Dining Table (Sizes: 230cm x 100cm, Thickness: 50mm, Breadboard Ends: Yes, Bench: None, Top Finish: Light, Paint Colour: Natural Base to match the top, )","qty":1,"parsed":{"category":"table","model":"X-frame","length":230,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":"Natural Base to match the top","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:9ac8cb54bbe84b40bee64f53c4a8ccf7","brand":"tmf","source":"sage","number":"SI-1832","reference":"TM000731","date":"2026-08-07","ageDays":37,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":866.66,"gross":1040,"tax":173.34,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Thorpe Le Soken","outcode":"CO16","region":"East of England","country":"GB"},"product":{"category":"table","model":"Union base","length":183,"width":85,"thickness":40,"finish":"Light","breadboard":true,"colour":"Matchstick","bench":null},"productTitle":"Design Your Own Table (Length: 183cm, Width: 85cm, Thickness: 40mm, Table Finish: Light, Base Style: Union, Base Colour: Matchstick, Breadboard Ends: Yes, Matching Bench: None, )","items":[{"title":"Design Your Own Table (Length: 183cm, Width: 85cm, Thickness: 40mm, Table Finish: Light, Base Style: Union, Base Colour: Matchstick, Breadboard Ends: Yes, Matching Bench: None, )","qty":1,"parsed":{"category":"table","model":"Union base","length":183,"width":85,"thickness":40,"finish":"Light","breadboard":true,"colour":"Matchstick","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11759091548425","brand":"lumbr","source":"shopify","number":"#1023","reference":"","date":"2026-08-04","ageDays":39,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1607.5,"gross":1929,"tax":321.5,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"London","outcode":"N8","region":"London","country":"GB"},"product":{"category":"table","model":"Taper leg","length":220,"width":94,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Handmade Table — 220×94cm + extending leaves","items":[{"title":"Taper Handmade Table — 220×94cm + extending leaves","qty":1,"parsed":{"category":"table","model":"Taper leg","length":220,"width":94,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"shopify:11758649770249","brand":"lumbr","source":"shopify","number":"#1022","reference":"","date":"2026-08-04","ageDays":39,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1003.33,"gross":1204,"tax":200.67,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"London","outcode":"SW12","region":"London","country":"GB"},"product":{"category":"table","model":"Cabriole","length":185,"width":95,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Cabriole Handmade Table — 185×95cm","items":[{"title":"Cabriole Handmade Table — 185×95cm","qty":1,"parsed":{"category":"table","model":"Cabriole","length":185,"width":95,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:415ff4c34628496db8798e0f6031d25c","brand":"tmf","source":"sage","number":"SI-1831","reference":"TM000730","date":"2026-08-04","ageDays":40,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2987.5,"gross":3585,"tax":597.5,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Badminton","outcode":"GL9","region":"South West","country":"GB"},"product":{"category":"table","model":"Trestle","length":250,"width":100,"thickness":null,"finish":null,"breadboard":true,"colour":null,"bench":"1x Long Bench, 2x Short Benches"},"productTitle":"English Primitive Georgian Style Trestle Table (Size: 250cm x 100cm, Breadboard Ends: Yes, Bench: 1x Long Bench, 2x Short Benches, )","items":[{"title":"English Primitive Georgian Style Trestle Table (Size: 250cm x 100cm, Breadboard Ends: Yes, Bench: 1x Long Bench, 2x Short Benches, )","qty":1,"parsed":{"category":"table","model":"Trestle","length":250,"width":100,"thickness":null,"finish":null,"breadboard":true,"colour":null,"bench":"1x Long Bench, 2x Short Benches"}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:0aed8a6674384be19455ddd1f1e9734c","brand":"tmf","source":"sage","number":"SI-1829","reference":"","date":"2026-08-01","ageDays":43,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":750,"gross":900,"tax":150,"shipping":40,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Costock","outcode":"LE12","region":"East Midlands","country":"GB"},"product":{"category":"table","model":"X-frame","length":160,"width":92,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made dining table 160cm long x 92cm wide. The 50mm top with breadboard ends in \"Light\" finish supported by black X frame legs. ","items":[{"title":"Hand made dining table 160cm long x 92cm wide. The 50mm top with breadboard ends in \"Light\" finish supported by black X frame legs. ","qty":1,"parsed":{"category":"table","model":"X-frame","length":160,"width":92,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:a17623cd462d4ecd80b8d2a02ad6b295","brand":"tmf","source":"sage","number":"SI-1830","reference":"TM000729","date":"2026-08-01","ageDays":43,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2154.16,"gross":2585,"tax":430.84,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"STOCKPORT","outcode":"SK3","region":"North West","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":300,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null},"productTitle":"Ibiza Pedestal Dining Table (Size: 300cm x 110cm, Paint Colour: Off Black, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","items":[{"title":"Ibiza Pedestal Dining Table (Size: 300cm x 110cm, Paint Colour: Off Black, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":300,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11745015562505","brand":"lumbr","source":"shopify","number":"#1021","reference":"","date":"2026-07-31","ageDays":43,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":890.83,"gross":1069,"tax":178.17,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Thorpe, Ashbourne, Derbyshire","outcode":"DE6","region":"East Midlands","country":"GB"},"product":{"category":"table","model":"Taper leg","length":170,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Handmade Table — 170×90cm","items":[{"title":"Taper Handmade Table — 170×90cm","qty":1,"parsed":{"category":"table","model":"Taper leg","length":170,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:149bfadef7a14a5891dfdcc05fe757eb","brand":"tmf","source":"sage","number":"SI-1827","reference":"","date":"2026-07-31","ageDays":44,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2570.83,"gross":3085,"tax":514.17,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Haddington","outcode":"EH41","region":"Scotland","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":275,"width":100,"thickness":40,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null},"productTitle":"Hand made dining table 275cm long x 100cm wide. The 40mm thick top with breadboard ends in \"Light\" finish supported by carved pedestal \"Ibiza\" style legs painted in F and B \"Off Black\". Plus 2 x matching short benches. ","items":[{"title":"Hand made dining table 275cm long x 100cm wide. The 40mm thick top with breadboard ends in \"Light\" finish supported by carved pedestal \"Ibiza\" style legs painted in F and B \"Off Black\". Plus 2 x matching short benches. ","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":275,"width":100,"thickness":40,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null}}],"tags":[]},{"key":"sage:5cfb7cebe1ef408eb766131183941ff6","brand":"tmf","source":"sage","number":"SI-1828","reference":"","date":"2026-07-31","ageDays":44,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1570.83,"gross":1885,"tax":314.17,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Tilford","outcode":"GU10","region":"South East","country":"GB"},"product":{"category":"table","model":"X-frame","length":250,"width":120,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made X frame dining table 250cm x 120cm. The 50mm thick top with breadboard ends in \"Light\" finish. The X frame legs in light distressed white paint. 35cm overhang at each end. ","items":[{"title":"Hand made X frame dining table 250cm x 120cm. The 50mm thick top with breadboard ends in \"Light\" finish. The X frame legs in light distressed white paint. 35cm overhang at each end. ","qty":1,"parsed":{"category":"table","model":"X-frame","length":250,"width":120,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:504baf7d891d4c3ab764f758300aaf7a","brand":"tmf","source":"sage","number":"SI-1825","reference":"TM000728","date":"2026-07-29","ageDays":46,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2404.16,"gross":2885,"tax":480.84,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Thornbury, Bristol","outcode":"BS35","region":"South West","country":"GB"},"product":{"category":"table","model":"Balustrade pedestal","length":300,"width":110,"thickness":null,"finish":"Light","breadboard":true,"colour":"Cooks Blue","bench":null},"productTitle":"Handmade Balustrade Table (Size: 300cm x 110cm, Bench: None, Paint Colour: Cooks Blue, Breadboard Ends: Yes, Finish: Light, )","items":[{"title":"Handmade Balustrade Table (Size: 300cm x 110cm, Bench: None, Paint Colour: Cooks Blue, Breadboard Ends: Yes, Finish: Light, )","qty":1,"parsed":{"category":"table","model":"Balustrade pedestal","length":300,"width":110,"thickness":null,"finish":"Light","breadboard":true,"colour":"Cooks Blue","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:b261e3e6c1a04714bb16b471a317bcc0","brand":"tmf","source":"sage","number":"SI-1826","reference":"","date":"2026-07-29","ageDays":46,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2333.33,"gross":2800,"tax":466.67,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Manchester","outcode":"M24","region":"North West","country":"GB"},"product":{"category":"table","model":"Pedestal","length":230,"width":100,"thickness":50,"finish":"Medium","breadboard":null,"colour":null,"bench":"2 benches"},"productTitle":"Hand made dining table230cm long x 100cm wide. The 50mm thick top in medium finish with custom corners. The carved pedestal base in custom height. Plus 2x short benches in custom height to match the table. ","items":[{"title":"Hand made dining table230cm long x 100cm wide. The 50mm thick top in medium finish with custom corners. The carved pedestal base in custom height. Plus 2x short benches in custom height to match the table. ","qty":1,"parsed":{"category":"table","model":"Pedestal","length":230,"width":100,"thickness":50,"finish":"Medium","breadboard":null,"colour":null,"bench":"2 benches"}}],"tags":[]},{"key":"shopify:11735189291273","brand":"lumbr","source":"shopify","number":"#1020","reference":"","date":"2026-07-28","ageDays":46,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2662.5,"gross":3195,"tax":532.5,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Ballymena","outcode":"BT43","region":"Northern Ireland","country":"GB"},"product":{"category":"commercial","model":"Eiffel","length":220,"width":120,"thickness":null,"finish":"Natural","breadboard":null,"colour":null,"bench":null},"productTitle":"Eiffel 220cm x 120cm - Handmade Dining Table. Natural base to match the table top","items":[{"title":"Eiffel 220cm x 120cm - Handmade Dining Table. Natural base to match the table top","qty":1,"parsed":{"category":"commercial","model":"Eiffel","length":220,"width":120,"thickness":null,"finish":"Natural","breadboard":null,"colour":null,"bench":null}},{"title":"1x 220cm long Matching Eiffel benches","qty":2,"parsed":{"category":"bench","model":"Eiffel","length":220,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"Delivery & Installation - Northern Ireland","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:7252555a26fd4bf499bebf6871b6a18c","brand":"tmf","source":"sage","number":"SI-1823","reference":"","date":"2026-07-28","ageDays":47,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":983.33,"gross":1180,"tax":196.67,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Stamford","outcode":"PE9","region":"East of England","country":"GB"},"product":{"category":"table","model":"Round","length":120,"width":120,"thickness":null,"finish":"Light","breadboard":null,"colour":null,"bench":null},"productTitle":"Hand made circular dining table. 120cm diameter. Light finish to the top and base. ","items":[{"title":"Hand made circular dining table. 120cm diameter. Light finish to the top and base. ","qty":1,"parsed":{"category":"table","model":"Round","length":120,"width":120,"thickness":null,"finish":"Light","breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:a4d2685530bc4adfb5686ec1203ab128","brand":"tmf","source":"sage","number":"SI-1824","reference":"TM000727","date":"2026-07-28","ageDays":47,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1445.83,"gross":1735,"tax":289.17,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Epsom","outcode":"KT17","region":"South East","country":"GB"},"product":{"category":"table","model":"X-frame","length":250,"width":100,"thickness":null,"finish":"Light","breadboard":true,"colour":"Matte","bench":null},"productTitle":"Rustic X-Frame Metal Table (Size: 250cm x 100cm, Bench: None, Breadboard Ends: Yes, Metal Finish: Matte, Top Finish: Light, )","items":[{"title":"Rustic X-Frame Metal Table (Size: 250cm x 100cm, Bench: None, Breadboard Ends: Yes, Metal Finish: Matte, Top Finish: Light, )","qty":1,"parsed":{"category":"table","model":"X-frame","length":250,"width":100,"thickness":null,"finish":"Light","breadboard":true,"colour":"Matte","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:ec596159dd9e42899878e9b71109f2b8","brand":"tmf","source":"sage","number":"SI-1821","reference":"","date":"2026-07-27","ageDays":48,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2377.5,"gross":2853,"tax":475.5,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Keyingham","outcode":"","region":"UK (unknown area)","country":"GB"},"product":{"category":"table","model":"Trestle","length":315,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made English Trestle Table 315cm long x 110cm wide. The 50mm thick top with breadboard ends in \"Light\" finish. ","items":[{"title":"Hand made English Trestle Table 315cm long x 110cm wide. The 50mm thick top with breadboard ends in \"Light\" finish. ","qty":1,"parsed":{"category":"table","model":"Trestle","length":315,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null}},{"title":"Hand made bespoke shelves 120cm long x 24cm wide in 40mm thick matching timber with \"Light\" finish. ","qty":4,"parsed":{"category":"other furniture","model":null,"length":120,"width":24,"thickness":40,"finish":"Light","breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:4773a4422ebe47af9927350eb3c0b739","brand":"tmf","source":"sage","number":"SI-1822","reference":"","date":"2026-07-27","ageDays":48,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":3970.83,"gross":4765,"tax":794.17,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"","outcode":"TA3","region":"South West","country":"GB"},"product":{"category":"table","model":"Taper leg","length":220,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Taper Leg Handmade Tables 220 x 90 ","items":[{"title":"Delivery & Installation","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"Taper Leg Handmade Tables 220 x 90 ","qty":1,"parsed":{"category":"table","model":"Taper leg","length":220,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"Taper Leg Handmade Tables 220 x 90 ","qty":1,"parsed":{"category":"table","model":"Taper leg","length":220,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"A-Frame Handmade Tables 180 x 90 ","qty":1,"parsed":{"category":"table","model":"A-frame","length":180,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"A-Frame Handmade Tables 180 x 90 ","qty":1,"parsed":{"category":"table","model":"A-frame","length":180,"width":90,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:2ec7eb8498cb49e89010f85891430ab8","brand":"tmf","source":"sage","number":"SI-1820","reference":"TM000726","date":"2026-07-26","ageDays":49,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2429.16,"gross":2915,"tax":485.84,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Woking","outcode":"GU22","region":"South East","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":330,"width":120,"thickness":50,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null},"productTitle":"Ibiza Pedestal Dining Table (Size: 330cm x 120cm, Paint Colour: Off Black, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","items":[{"title":"Ibiza Pedestal Dining Table (Size: 330cm x 120cm, Paint Colour: Off Black, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":330,"width":120,"thickness":50,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11726854717705","brand":"lumbr","source":"shopify","number":"#1019","reference":"","date":"2026-07-25","ageDays":49,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1549,"gross":1549,"tax":0,"shipping":49,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Thame","outcode":"OX9","region":"South East","country":"GB"},"product":{"category":"table","model":"Eiffel","length":200,"width":100,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Eiffel Handmade Table — 200×100cm","items":[{"title":"Eiffel Handmade Table — 200×100cm","qty":1,"parsed":{"category":"table","model":"Eiffel","length":200,"width":100,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:bdbfc0d6caf740af8fbaf64ed353d17d","brand":"tmf","source":"sage","number":"SI-1819","reference":"","date":"2026-07-25","ageDays":50,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1760,"gross":2112,"tax":352,"shipping":222,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Nr Sandown","outcode":"PO36","region":"South East","country":"GB"},"product":{"category":"table","model":"Eiffel","length":240,"width":105,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made dining table 240cm long x 105cm wide. The 50mm thick top with 10cm long breadboard ends. No grooves where the boards meet. Light finish. Supported by \"Eiffel\" style legs apinted in custom colour code RAL 7032 - Pebble Grey. ","items":[{"title":"Hand made dining table 240cm long x 105cm wide. The 50mm thick top with 10cm long breadboard ends. No grooves where the boards meet. Light finish. Supported by \"Eiffel\" style legs apinted in custom colour code RAL 7032 - Pebble Grey. ","qty":1,"parsed":{"category":"table","model":"Eiffel","length":240,"width":105,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:81366757e51a4be0909cf5aeb1ad45ff","brand":"tmf","source":"sage","number":"SI-1816","reference":"","date":"2026-07-19","ageDays":56,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1608.33,"gross":1930,"tax":321.67,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"","outcode":"HP6","region":"South East","country":"GB"},"product":{"category":"table","model":"X-frame","length":290,"width":100,"thickness":50,"finish":"Medium","breadboard":false,"colour":null,"bench":null},"productTitle":"Hand made dining table 290cm long x 100cm wide. The 50mm thick top without breadboard ends and without grooves between the boards. In medium finish supported by X frame legs painted in custom colour. ","items":[{"title":"Hand made dining table 290cm long x 100cm wide. The 50mm thick top without breadboard ends and without grooves between the boards. In medium finish supported by X frame legs painted in custom colour. ","qty":1,"parsed":{"category":"table","model":"X-frame","length":290,"width":100,"thickness":50,"finish":"Medium","breadboard":false,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:a96c3e0a22c14736a7f4ae9ab6459ccc","brand":"tmf","source":"sage","number":"SI-1817","reference":"","date":"2026-07-19","ageDays":56,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2070.83,"gross":2485,"tax":414.17,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Ampney Crucis","outcode":"GL7","region":"South West","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":280,"width":130,"thickness":50,"finish":"Dark","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made dining table 280cm long x 130cm wide. The 50mm thick top with breadboard ends in a dark finish supported by hand carved \"Ibiza\" style legs in matching dark finish. ","items":[{"title":"Hand made dining table 280cm long x 130cm wide. The 50mm thick top with breadboard ends in a dark finish supported by hand carved \"Ibiza\" style legs in matching dark finish. ","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":280,"width":130,"thickness":50,"finish":"Dark","breadboard":true,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:f6b13c0a4d574af08bd9b467831a5fdd","brand":"tmf","source":"sage","number":"SI-1815","reference":"","date":"2026-07-16","ageDays":59,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2983.33,"gross":3580,"tax":596.67,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Weybridge","outcode":"KT13","region":"South East","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":260,"width":110,"thickness":50,"finish":"Medium","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made dining table 260cm long x 110cm wide. The 50mm thick top with breadboard ends in medium finish supported by \"Ibiza\" style carved pedestal legs painted in a custom colour. Plus 2 x matching extensions leaves 35cm long each. ","items":[{"title":"Hand made dining table 260cm long x 110cm wide. The 50mm thick top with breadboard ends in medium finish supported by \"Ibiza\" style carved pedestal legs painted in a custom colour. Plus 2 x matching extensions leaves 35cm long each. ","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":260,"width":110,"thickness":50,"finish":"Medium","breadboard":true,"colour":null,"bench":null}},{"title":"Matching hand made Round Dining table 120cm diameter 50mm thick top with carved pedestal base painted in a custom colour. ","qty":1,"parsed":{"category":"table","model":"Pedestal","length":120,"width":120,"thickness":50,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:b507e0bc74e94a53aa806bf7faad381d","brand":"tmf","source":"sage","number":"SI-1813","reference":"","date":"2026-07-11","ageDays":64,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1862.5,"gross":2235,"tax":372.5,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Easingwold","outcode":"YO61","region":"Yorkshire & Humber","country":"GB"},"product":{"category":"table","model":"Balustrade pedestal","length":215,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null},"productTitle":"Hand made dining table 215cm long x 100cm wide. The 50mm thick top with breadboard ends in \"Light\" finish supported by \"Balustrade Pedestal\" base plus 2 x 40cm long matching extensions. ","items":[{"title":"Hand made dining table 215cm long x 100cm wide. The 50mm thick top with breadboard ends in \"Light\" finish supported by \"Balustrade Pedestal\" base plus 2 x 40cm long matching extensions. ","qty":1,"parsed":{"category":"table","model":"Balustrade pedestal","length":215,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:55dbde4ca76e475fb1d8cc326d044f9c","brand":"tmf","source":"sage","number":"SI-1814","reference":"TM000725","date":"2026-07-11","ageDays":64,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2508.33,"gross":3010,"tax":501.67,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Exeter","outcode":"EX2","region":"South West","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":250,"width":100,"thickness":50,"finish":"Medium","breadboard":true,"colour":"Hague Blue","bench":"2x Short Benches"},"productTitle":"Ibiza Pedestal Dining Table (Size: 250cm x 100cm, Paint Colour: Hague Blue, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Medium, Bench: 2x Short Benches, )","items":[{"title":"Ibiza Pedestal Dining Table (Size: 250cm x 100cm, Paint Colour: Hague Blue, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Medium, Bench: 2x Short Benches, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":250,"width":100,"thickness":50,"finish":"Medium","breadboard":true,"colour":"Hague Blue","bench":"2x Short Benches"}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:7f151f94f0424c689d3405b51c88bb14","brand":"tmf","source":"sage","number":"SI-1812","reference":"TM000724","date":"2026-07-10","ageDays":65,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":1566.66,"gross":1880,"tax":313.34,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Holt","outcode":"NR25","region":"East of England","country":"GB"},"product":{"category":"table","model":"Trestle","length":230,"width":100,"thickness":null,"finish":null,"breadboard":false,"colour":null,"bench":null},"productTitle":"English Primitive Georgian Style Trestle Table (Size: 230cm x 100cm, Breadboard Ends: No, Bench: None, )","items":[{"title":"English Primitive Georgian Style Trestle Table (Size: 230cm x 100cm, Breadboard Ends: No, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Trestle","length":230,"width":100,"thickness":null,"finish":null,"breadboard":false,"colour":null,"bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:422c6de9d02049b0b1bbec205e62bf1a","brand":"tmf","source":"sage","number":"SI-1811","reference":"","date":"2026-07-08","ageDays":67,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2035,"gross":2442,"tax":407,"shipping":102,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Doncaster","outcode":"DN1","region":"Yorkshire & Humber","country":"GB"},"product":{"category":"table","model":"Union base","length":240,"width":92,"thickness":50,"finish":"Light","breadboard":true,"colour":"Brunswick Green","bench":null},"productTitle":"Hand made dining table 240cm long x 92cm wide. The 50mm thick top with breadboard ends in “Light” finish supported by “Union” style base painted in “Brunswick Green”. ","items":[{"title":"Hand made dining table 240cm long x 92cm wide. The 50mm thick top with breadboard ends in “Light” finish supported by “Union” style base painted in “Brunswick Green”. ","qty":1,"parsed":{"category":"table","model":"Union base","length":240,"width":92,"thickness":50,"finish":"Light","breadboard":true,"colour":"Brunswick Green","bench":null}},{"title":"Hand made “Perch” table 240cm long x 40cm wide. ","qty":1,"parsed":{"category":"table","model":"Perch","length":240,"width":40,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:9a2f9efabeb149d4b9d711a1bd0951e5","brand":"tmf","source":"sage","number":"SI-1810","reference":"TM000723","date":"2026-07-06","ageDays":69,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1654.16,"gross":1985,"tax":330.84,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Morpeth","outcode":"NE61","region":"North East","country":"GB"},"product":{"category":"table","model":"Union base","length":275,"width":110,"thickness":null,"finish":"Rustic","breadboard":true,"colour":"Skylight","bench":null},"productTitle":"Union Base Reclaim Off-Black Distress Effect with Breadboard Ends & Rustic Finish (Size: 275cm x 110cm, Paint Colour: Skylight, Breadboard Ends: Yes, Bench: None, )","items":[{"title":"Union Base Reclaim Off-Black Distress Effect with Breadboard Ends & Rustic Finish (Size: 275cm x 110cm, Paint Colour: Skylight, Breadboard Ends: Yes, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Union base","length":275,"width":110,"thickness":null,"finish":"Rustic","breadboard":true,"colour":"Skylight","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:452b26da1c9447768ae0d055b13c26c2","brand":"tmf","source":"sage","number":"SI-1809","reference":"","date":"2026-07-03","ageDays":72,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2190.83,"gross":2629,"tax":438.17,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Burnley","outcode":"","region":"UK (unknown area)","country":"GB"},"product":{"category":"commercial","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Large Communal Work Space Desk","items":[{"title":"Large Communal Work Space Desk","qty":1,"parsed":{"category":"commercial","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:d65ec9057e50453c9ebb62b4c195a68c","brand":"tmf","source":"sage","number":"SI-1808","reference":"TM000722","date":"2026-07-02","ageDays":73,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1362.5,"gross":1635,"tax":272.5,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Kirkby In Ashfield","outcode":"NG17","region":"East Midlands","country":"GB"},"product":{"category":"table","model":"Farmhouse","length":250,"width":100,"thickness":null,"finish":"Honey","breadboard":null,"colour":"Pitch Black","bench":null},"productTitle":"English Farmhouse Table (Size: 250cm x 100cm, Paint Colour: Pitch Black, Top Finish: Honey, )","items":[{"title":"English Farmhouse Table (Size: 250cm x 100cm, Paint Colour: Pitch Black, Top Finish: Honey, )","qty":1,"parsed":{"category":"table","model":"Farmhouse","length":250,"width":100,"thickness":null,"finish":"Honey","breadboard":null,"colour":"Pitch Black","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:60f98968dd1c477796c4c43ba6943c1f","brand":"tmf","source":"sage","number":"SI-1807","reference":"","date":"2026-07-01","ageDays":74,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2820.83,"gross":3385,"tax":564.17,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"London","outcode":"EC2A","region":"London","country":"GB"},"product":{"category":"table","model":"Saffron","length":400,"width":92,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Hand made \"Saffron\" dining table 4m long x 92cm wide. ","items":[{"title":"Hand made \"Saffron\" dining table 4m long x 92cm wide. ","qty":1,"parsed":{"category":"table","model":"Saffron","length":400,"width":92,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:37e78e9ae62e41a286369cfe730a05c9","brand":"tmf","source":"sage","number":"SI-1806","reference":"TM000721","date":"2026-06-30","ageDays":75,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1612.5,"gross":1935,"tax":322.5,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Lower Broadheath","outcode":"WR2","region":"West Midlands","country":"GB"},"product":{"category":"table","model":"X-frame","length":275,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null},"productTitle":"X-Frame with Reclaimed Wood Hand Made Dining Table (Sizes: 275cm x 110cm, Thickness: 50mm, Breadboard Ends: Yes, Bench: None, Top Finish: Light, Paint Colour: Off Black, )","items":[{"title":"X-Frame with Reclaimed Wood Hand Made Dining Table (Sizes: 275cm x 110cm, Thickness: 50mm, Breadboard Ends: Yes, Bench: None, Top Finish: Light, Paint Colour: Off Black, )","qty":1,"parsed":{"category":"table","model":"X-frame","length":275,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:680c230fe32a4deca4e23dcb7dd10928","brand":"tmf","source":"sage","number":"SI-1804","reference":"","date":"2026-06-27","ageDays":78,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2995,"gross":2995,"tax":0,"shipping":200,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Caunes Minervois","outcode":"","region":"Abroad (FR)","country":"FR"},"product":{"category":"table","model":"Trestle","length":210,"width":110,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Hand made dining table 210cm long x 110cm wide. English Primitive Georgian Trestle style. ","items":[{"title":"Hand made dining table 210cm long x 110cm wide. English Primitive Georgian Trestle style. ","qty":1,"parsed":{"category":"table","model":"Trestle","length":210,"width":110,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"Matching bench 210cm long","qty":1,"parsed":{"category":"bench","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"Matching bench 210cm long","qty":1,"parsed":{"category":"bench","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:b2390261c19144449da5ff30e21d889a","brand":"tmf","source":"sage","number":"SI-1805","reference":"","date":"2026-06-27","ageDays":78,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2212.5,"gross":2655,"tax":442.5,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Barr","outcode":"KA26","region":"Scotland","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Ibiza Pedestal Dining Table","items":[{"title":"Ibiza Pedestal Dining Table","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"shopify:11635914375433","brand":"lumbr","source":"shopify","number":"#1018","reference":"","date":"2026-06-26","ageDays":79,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1835,"gross":1835,"tax":0,"shipping":140,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Thornby","outcode":"NN6","region":"East Midlands","country":"GB"},"product":{"category":"table","model":"Eiffel","length":215,"width":105,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Eiffel Handmade Table — 215×105cm","items":[{"title":"Eiffel Handmade Table — 215×105cm","qty":1,"parsed":{"category":"table","model":"Eiffel","length":215,"width":105,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":["bespoke","configurator","lumbr"]},{"key":"sage:40a0d259091046dc8f0de0429eb3a8e9","brand":"tmf","source":"sage","number":"SI-1802","reference":"","date":"2026-06-25","ageDays":80,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2070.83,"gross":2485,"tax":414.17,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Brimscombe","outcode":"GL5","region":"South West","country":"GB"},"product":{"category":"table","model":null,"length":200,"width":120,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Hand made rustic dining table 200cm long x 120cm wide. ","items":[{"title":"Hand made rustic dining table 200cm long x 120cm wide. ","qty":2,"parsed":{"category":"table","model":null,"length":200,"width":120,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:4069aecc03fd41ee8cffb814a49a5588","brand":"tmf","source":"sage","number":"SI-1803","reference":"TM000720","date":"2026-06-25","ageDays":80,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2037.5,"gross":2445,"tax":407.5,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Rudgeway Bristol","outcode":"BS35","region":"South West","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":275,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null},"productTitle":"Ibiza Pedestal Dining Table (Size: 275cm x 110cm, Paint Colour: Off Black, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","items":[{"title":"Ibiza Pedestal Dining Table (Size: 275cm x 110cm, Paint Colour: Off Black, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Light, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":275,"width":110,"thickness":50,"finish":"Light","breadboard":true,"colour":"Off Black","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:680102b7140e47ba8614d1de00712de0","brand":"tmf","source":"sage","number":"SI-1800","reference":"TM000719","date":"2026-06-24","ageDays":81,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1483.33,"gross":1780,"tax":296.67,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Marlow Common","outcode":"SL7","region":"South East","country":"GB"},"product":{"category":"table","model":"Balustrade pedestal","length":215,"width":100,"thickness":50,"finish":"Medium","breadboard":true,"colour":"Hague Blue","bench":null},"productTitle":"Balustrade Pedestal Table (Size: 215cm x 100cm, Paint Colour: Hague Blue, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Medium, Bench: None, )","items":[{"title":"Balustrade Pedestal Table (Size: 215cm x 100cm, Paint Colour: Hague Blue, Breadboard Ends: Yes, Thickness: 50mm, Top Finish: Medium, Bench: None, )","qty":1,"parsed":{"category":"table","model":"Balustrade pedestal","length":215,"width":100,"thickness":50,"finish":"Medium","breadboard":true,"colour":"Hague Blue","bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:d0fd098d69d94e56b51fe1e6911991c0","brand":"tmf","source":"sage","number":"SI-1801","reference":"","date":"2026-06-24","ageDays":81,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":5000,"gross":6000,"tax":1000,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Llanderfel","outcode":"LL23","region":"Wales","country":"GB"},"product":{"category":"table","model":"Pedestal","length":300,"width":110,"thickness":50,"finish":null,"breadboard":true,"colour":"Purbeck Stone","bench":null},"productTitle":"Hand made dining table 300cm long x 110cm wide. The 50mm top with breadboard ends supported by carved pedestal base painted in \"Purbeck Stone\". ","items":[{"title":"Hand made dining table 300cm long x 110cm wide. The 50mm top with breadboard ends supported by carved pedestal base painted in \"Purbeck Stone\". ","qty":2,"parsed":{"category":"table","model":"Pedestal","length":300,"width":110,"thickness":50,"finish":null,"breadboard":true,"colour":"Purbeck Stone","bench":null}},{"title":"Same model as above 360cm long x 110cm wide. ","qty":1,"parsed":{"category":"table","model":null,"length":360,"width":110,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"4 x assorted benches","qty":1,"parsed":{"category":"bench","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:c2a2d9191b6f4cd5b25af6affdf1415d","brand":"tmf","source":"sage","number":"SI-1799","reference":"TM000718","date":"2026-06-20","ageDays":85,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":2066.66,"gross":2480,"tax":413.34,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Reading","outcode":"RG31","region":"South East","country":"GB"},"product":{"category":"table","model":"Trestle","length":183,"width":92,"thickness":null,"finish":null,"breadboard":true,"colour":null,"bench":"2x Long Benches"},"productTitle":"English Primitive Georgian Style Trestle Table (Size: 183cm x 92cm, Breadboard Ends: Yes, Bench: 2x Long Benches, )","items":[{"title":"English Primitive Georgian Style Trestle Table (Size: 183cm x 92cm, Breadboard Ends: Yes, Bench: 2x Long Benches, )","qty":1,"parsed":{"category":"table","model":"Trestle","length":183,"width":92,"thickness":null,"finish":null,"breadboard":true,"colour":null,"bench":"2x Long Benches"}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:baea2b4edbd345b8b54ffc4e7673f4ce","brand":"tmf","source":"sage","number":"SI-1798","reference":"TM000717","date":"2026-06-18","ageDays":87,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":4112.5,"gross":4935,"tax":822.5,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"RADLETT","outcode":"WD7","region":"South East","country":"GB"},"product":{"category":"table","model":"Refectory","length":300,"width":110,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null},"productTitle":"Solid Oak Refectory table (Size: 300cm x 110cm, )","items":[{"title":"Solid Oak Refectory table (Size: 300cm x 110cm, )","qty":1,"parsed":{"category":"table","model":"Refectory","length":300,"width":110,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:6760219d5cf447289cefbba31b79d894","brand":"tmf","source":"sage","number":"SI-1797","reference":"","date":"2026-06-16","ageDays":89,"status":"ordered","payment":"paid","paymentLabel":"Paid","net":2820.83,"gross":3385,"tax":564.17,"shipping":85,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"Gaddesby","outcode":"LE7","region":"East Midlands","country":"GB"},"product":{"category":"table","model":"Bulbous leg","length":330,"width":120,"thickness":50,"finish":null,"breadboard":true,"colour":null,"bench":null},"productTitle":"Hand madedining table 330cm long x 120cm wide. The 50mm top with breadboard ends. No grooves - smooth finish, custom tone. Supported by hand made bulbous leg at each end. ","items":[{"title":"Hand madedining table 330cm long x 120cm wide. The 50mm top with breadboard ends. No grooves - smooth finish, custom tone. Supported by hand made bulbous leg at each end. ","qty":1,"parsed":{"category":"table","model":"Bulbous leg","length":330,"width":120,"thickness":50,"finish":null,"breadboard":true,"colour":null,"bench":null}}],"tags":[]},{"key":"sage:db639279427940bb9dcdf039b4d4fc92","brand":"tmf","source":"sage","number":"SI-1796","reference":"TM000716","date":"2026-06-15","ageDays":90,"status":"delivered","payment":"paid","paymentLabel":"Paid","net":1916.66,"gross":2300,"tax":383.34,"shipping":0,"outstanding":0,"currency":"GBP","customer":"","place":{"town":"braintree","outcode":"CM7","region":"East of England","country":"GB"},"product":{"category":"table","model":"Ibiza pedestal","length":183,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":"All White","bench":"1x Long Bench"},"productTitle":"Design Your Own Table (Length: 183cm, Width: 100cm, Thickness: 50mm, Table Finish: Light, Base Style: Ibiza, Base Colour: All White, Breadboard Ends: Yes, Matching Bench: 1x Long Bench, )","items":[{"title":"Design Your Own Table (Length: 183cm, Width: 100cm, Thickness: 50mm, Table Finish: Light, Base Style: Ibiza, Base Colour: All White, Breadboard Ends: Yes, Matching Bench: 1x Long Bench, )","qty":1,"parsed":{"category":"table","model":"Ibiza pedestal","length":183,"width":100,"thickness":50,"finish":"Light","breadboard":true,"colour":"All White","bench":"1x Long Bench"}},{"title":"Standard Delivery","qty":1,"parsed":{"category":"delivery","model":null,"length":null,"width":null,"thickness":null,"finish":null,"breadboard":null,"colour":null,"bench":null}}],"tags":[]}]};
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const gbp = (n) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 }).format(n || 0);
+  const gbpK = (n) => (Math.abs(n) >= 10000 ? `£${(n / 1000).toFixed(n >= 100000 ? 0 : 1)}k` : gbp(n));
+  const fmtDate = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  const fmtDateY = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  const BRAND = { lumbr: 'Lumbr', tmf: 'Tom Marsh' };
+
+  if (!FEED || !FEED.orders) {
+    $('#sub').textContent = 'No data in this page yet.';
+    return;
+  }
+
+  const state = { period: '90', brand: 'all', status: 'all', q: '', sort: { key: 'date', dir: 'desc' }, open: new Set() };
+  const now = new Date(FEED.generatedAt);
+  const dayMs = 86400000;
+
+  // ---------- filtering ----------
+  function inPeriod(o) {
+    if (state.period === 'all') return true;
+    const days = Number(state.period);
+    return (now - new Date(o.date + 'T12:00:00')) / dayMs <= days;
+  }
+  function filtered({ ignoreQ = false } = {}) {
+    const q = state.q.trim().toLowerCase();
+    return FEED.orders.filter((o) => {
+      if (!inPeriod(o)) return false;
+      if (state.brand !== 'all' && o.brand !== state.brand) return false;
+      if (state.status === 'live' && o.status === 'delivered') return false;
+      if (state.status === 'delivered' && o.status !== 'delivered') return false;
+      if (!ignoreQ && q) {
+        const hay = [o.number, o.reference, o.productTitle, o.items.map((i) => i.title).join(' '), o.place.town, o.place.region, o.place.outcode, o.product.model, o.product.finish, o.product.colour, o.customer, BRAND[o.brand]].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+  function previousPeriod() {
+    if (state.period === 'all') return null;
+    const days = Number(state.period);
+    return FEED.orders.filter((o) => {
+      const age = (now - new Date(o.date + 'T12:00:00')) / dayMs;
+      if (!(age > days && age <= days * 2)) return false;
+      if (state.brand !== 'all' && o.brand !== state.brand) return false;
+      if (state.status === 'live' && o.status === 'delivered') return false;
+      if (state.status === 'delivered' && o.status !== 'delivered') return false;
+      return true;
+    });
+  }
+  const sum = (arr, f) => arr.reduce((s, x) => s + (f(x) || 0), 0);
+
+  // ---------- KPIs ----------
+  function renderKpis(list) {
+    const prev = previousPeriod();
+    const net = sum(list, (o) => o.net);
+    const gross = sum(list, (o) => o.gross);
+    const aov = list.length ? net / list.length : 0;
+    const live = list.filter((o) => o.status !== 'delivered');
+    const lumbr = list.filter((o) => o.brand === 'lumbr');
+    const tmf = list.filter((o) => o.brand === 'tmf');
+    const feedCoversPrev = FEED.from && (now - new Date(FEED.from + 'T12:00:00')) / dayMs >= Number(state.period) * 2;
+    const delta = (cur, prv, money) => {
+      if (!prev || !feedCoversPrev) return `<div class="delta">${state.period === 'all' ? '' : 'previous period not in feed yet'}</div>`;
+      if (!prv) return `<div class="delta">no previous-period data</div>`;
+      const pct = Math.round(((cur - prv) / prv) * 100);
+      const cls = pct > 0 ? 'up' : pct < 0 ? 'down' : '';
+      return `<div class="delta ${cls}">${pct > 0 ? '▲' : pct < 0 ? '▼' : '='} ${Math.abs(pct)}% vs previous ${state.period} days (${money ? gbpK(prv) : prv})</div>`;
+    };
+    const tiles = [
+      { label: 'Orders', value: list.length, extra: delta(list.length, prev ? prev.length : 0) },
+      { label: 'Net revenue', value: gbpK(net), small: 'ex VAT', extra: delta(net, prev ? sum(prev, (o) => o.net) : 0, true) },
+      { label: 'Gross revenue', value: gbpK(gross), small: 'inc VAT' },
+      { label: 'Average order', value: gbp(aov), small: 'net', extra: delta(aov, prev && prev.length ? sum(prev, (o) => o.net) / prev.length : 0, true) },
+      { label: 'Lumbr', value: lumbr.length, small: gbpK(sum(lumbr, (o) => o.net)), cls: 'lumbr' },
+      { label: 'Tom Marsh', value: tmf.length, small: gbpK(sum(tmf, (o) => o.net)), cls: 'tmf' },
+    ];
+    $('#kpis').innerHTML = tiles.map((t) => `<div class="kpi ${t.cls || ''}"><div class="label">${esc(t.label)}</div><div class="value">${esc(t.value)}${t.small ? `<small>${esc(t.small)}</small>` : ''}</div>${t.extra || ''}</div>`).join('');
+    const liveNet = sum(live, (o) => o.net);
+    $('#sub').innerHTML = `<b>${FEED.count}</b> orders in the feed, ${fmtDateY(FEED.from)} – ${fmtDateY(FEED.to)} · ${live.length} in production (${gbpK(liveNet)} net) · updated ${new Date(FEED.generatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}`;
+  }
+
+  // ---------- chart helpers ----------
+  const tip = $('#tip');
+  function showTip(e, html) { tip.innerHTML = html; tip.style.display = 'block'; moveTip(e); }
+  function moveTip(e) { const x = e.clientX + 14, y = e.clientY + 14; tip.style.left = Math.min(x, window.innerWidth - tip.offsetWidth - 10) + 'px'; tip.style.top = Math.min(y, window.innerHeight - tip.offsetHeight - 10) + 'px'; }
+  function hideTip() { tip.style.display = 'none'; }
+  function bindTips(container) {
+    $$('[data-tip]', container).forEach((el) => {
+      el.addEventListener('mouseenter', (e) => showTip(e, el.dataset.tip));
+      el.addEventListener('mousemove', moveTip);
+      el.addEventListener('mouseleave', hideTip);
+    });
+  }
+  function niceMax(v) {
+    if (v <= 0) return 1;
+    const p = Math.pow(10, Math.floor(Math.log10(v)));
+    const n = v / p;
+    const m = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
+    return m * p;
+  }
+
+  // Stacked vertical bars: buckets [{label, lumbr, tmf, lumbrN, tmfN}]
+  function stackedBars(container, buckets, { money = true } = {}) {
+    if (!buckets.length) { container.innerHTML = '<div class="empty">No orders in this period.</div>'; return; }
+    const W = 1000, H = 260, padL = 48, padR = 10, padT = 18, padB = 34;
+    const iw = W - padL - padR, ih = H - padT - padB;
+    const max = niceMax(Math.max(...buckets.map((b) => b.lumbr + b.tmf)));
+    const bw = iw / buckets.length;
+    const barW = Math.min(46, bw * 0.62);
+    const ticks = 4;
+    let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Sales over time">`;
+    for (let i = 0; i <= ticks; i++) {
+      const v = (max / ticks) * i, y = padT + ih - (v / max) * ih;
+      s += `<line class="gridline" x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}"/>`;
+      s += `<g class="axis"><text x="${padL - 8}" y="${y + 4}" text-anchor="end">${money ? (max >= 5000 ? `£${+(v / 1000).toFixed(1)}k` : gbp(v)) : v}</text></g>`;
+    }
+    buckets.forEach((b, i) => {
+      const x = padL + i * bw + (bw - barW) / 2;
+      const hL = (b.lumbr / max) * ih, hT = (b.tmf / max) * ih;
+      const yT = padT + ih - hT;
+      const yL = yT - hL - (hL && hT ? 2 : 0);
+      const total = b.lumbr + b.tmf;
+      const tipHtml = `<b>${esc(b.label)}</b><br>Lumbr: ${money ? gbp(b.lumbr) : b.lumbr} (${b.lumbrN} order${b.lumbrN === 1 ? '' : 's'})<br>Tom Marsh: ${money ? gbp(b.tmf) : b.tmf} (${b.tmfN} order${b.tmfN === 1 ? '' : 's'})<br>Total: ${money ? gbp(total) : total}`;
+      if (hT > 0) s += `<rect class="bar tmf" x="${x}" y="${yT}" width="${barW}" height="${hT}" rx="${hL ? 0 : 4}" data-tip="${esc(tipHtml)}"/>`;
+      if (hL > 0) s += `<rect class="bar lumbr" x="${x}" y="${yL}" width="${barW}" height="${hL}" rx="4" data-tip="${esc(tipHtml)}"/>`;
+      if (total > 0 && buckets.length <= 16) s += `<text class="total" x="${x + barW / 2}" y="${Math.min(yL, yT) - 5}" text-anchor="middle">${money ? gbpK(total) : total}</text>`;
+      const every = buckets.length > 16 ? Math.ceil(buckets.length / 12) : 1;
+      if (i % every === 0 || i === buckets.length - 1) s += `<g class="axis"><text x="${x + barW / 2}" y="${H - 12}" text-anchor="middle">${esc(b.label)}</text></g>`;
+    });
+    s += `<line class="baseline" x1="${padL}" x2="${W - padR}" y1="${padT + ih}" y2="${padT + ih}"/></svg>`;
+    container.innerHTML = s;
+    bindTips(container);
+  }
+
+  // Horizontal bars: rows [{label, value, lumbr, tmf, extra}] — stacked by brand when given
+  function hBars(container, rows, { money = false, valueLabel = (r) => r.value, maxRows = 9 } = {}) {
+    rows = rows.slice(0, maxRows);
+    if (!rows.length) { container.innerHTML = '<div class="empty">Nothing to show for this selection.</div>'; return; }
+    const W = 440, rowH = 26, padL = 140, padR = 64, padT = 4;
+    const H = padT + rows.length * rowH + 4;
+    const iw = W - padL - padR;
+    const max = Math.max(...rows.map((r) => r.value)) || 1;
+    let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img">`;
+    rows.forEach((r, i) => {
+      const y = padT + i * rowH + 5;
+      const total = r.value;
+      const wL = ((r.lumbr || 0) / max) * iw, wT = ((r.tmf || 0) / max) * iw;
+      const w = (total / max) * iw;
+      const tipHtml = `<b>${esc(r.label)}</b><br>${r.tip || ''}`;
+      s += `<text class="lbl" x="${padL - 8}" y="${y + 12}" text-anchor="end">${esc(r.label.length > 21 ? r.label.slice(0, 20) + '…' : r.label)}</text>`;
+      if (r.lumbr !== undefined || r.tmf !== undefined) {
+        if (wL > 0) s += `<rect class="bar lumbr" x="${padL}" y="${y}" width="${Math.max(wL, 2)}" height="16" rx="4" data-tip="${esc(tipHtml)}"/>`;
+        if (wT > 0) s += `<rect class="bar tmf" x="${padL + wL + (wL ? 2 : 0)}" y="${y}" width="${Math.max(wT - (wL ? 2 : 0), 2)}" height="16" rx="4" data-tip="${esc(tipHtml)}"/>`;
+      } else {
+        s += `<rect class="bar neutral" x="${padL}" y="${y}" width="${Math.max(w, 2)}" height="16" rx="4" data-tip="${esc(tipHtml)}"/>`;
+      }
+      s += `<text class="val" x="${padL + Math.max(w, 2) + 6}" y="${y + 12}">${esc(valueLabel(r))}</text>`;
+    });
+    s += '</svg>';
+    container.innerHTML = s;
+    bindTips(container);
+  }
+
+  // ---------- data shaping ----------
+  function weekStart(d) { const x = new Date(d); const day = (x.getDay() + 6) % 7; x.setDate(x.getDate() - day); x.setHours(0, 0, 0, 0); return x; }
+  function timeBuckets(list) {
+    if (!list.length) return [];
+    const dates = list.map((o) => new Date(o.date + 'T12:00:00'));
+    const min = new Date(Math.min(...dates)), max = new Date(Math.max(...dates));
+    const spanDays = (max - min) / dayMs;
+    const monthly = spanDays > 200;
+    const key = (d) => monthly ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}` : weekStart(d).toISOString().slice(0, 10);
+    const label = (k) => monthly ? new Date(k + '-01T12:00:00').toLocaleDateString('en-GB', { month: 'short', year: '2-digit' }) : fmtDate(k);
+    const map = new Map();
+    // fill empty buckets
+    if (monthly) { const d = new Date(min.getFullYear(), min.getMonth(), 1); while (d <= max) { map.set(key(d), { label: label(key(d)), lumbr: 0, tmf: 0, lumbrN: 0, tmfN: 0 }); d.setMonth(d.getMonth() + 1); } }
+    else { const d = weekStart(min); while (d <= max) { map.set(key(d), { label: label(key(d)), lumbr: 0, tmf: 0, lumbrN: 0, tmfN: 0 }); d.setDate(d.getDate() + 7); } }
+    for (const o of list) {
+      const k = key(new Date(o.date + 'T12:00:00'));
+      const b = map.get(k); if (!b) continue;
+      b[o.brand] += o.net; b[o.brand + 'N'] += 1;
+    }
+    $('#timeHint').textContent = monthly ? 'net £ per month' : 'net £ per week (w/c Monday)';
+    return [...map.values()];
+  }
+  function groupBy(list, keyFn, { money = true } = {}) {
+    const map = new Map();
+    for (const o of list) {
+      const k = keyFn(o); if (!k) continue;
+      const g = map.get(k) || { label: k, value: 0, n: 0, lumbr: 0, tmf: 0, net: 0 };
+      g.n += 1; g.net += o.net; g[o.brand] += 1; g.value += 1;
+      map.set(k, g);
+    }
+    return [...map.values()].map((g) => ({ ...g, tip: `${g.n} order${g.n === 1 ? '' : 's'} · ${gbp(g.net)} net<br>Lumbr ${g.lumbr} · Tom Marsh ${g.tmf}` })).sort((a, b) => b.value - a.value);
+  }
+  function lengthBand(o) {
+    const L = o.product.length;
+    if (!L) return null;
+    if (L < 180) return 'under 180cm';
+    if (L < 220) return '180–219cm';
+    if (L < 260) return '220–259cm';
+    if (L < 300) return '260–299cm';
+    return '300cm+';
+  }
+  const LENGTH_ORDER = ['under 180cm', '180–219cm', '220–259cm', '260–299cm', '300cm+'];
+  function priceBand(o) {
+    const v = o.net;
+    if (v < 1000) return 'under £1k';
+    if (v < 1500) return '£1k–1.5k';
+    if (v < 2000) return '£1.5k–2k';
+    if (v < 3000) return '£2k–3k';
+    if (v < 4000) return '£3k–4k';
+    return '£4k+';
+  }
+  const PRICE_ORDER = ['under £1k', '£1k–1.5k', '£1.5k–2k', '£2k–3k', '£3k–4k', '£4k+'];
+
+  function renderCharts(list) {
+    stackedBars($('#chartTime'), timeBuckets(list));
+    hBars($('#chartModel'), groupBy(list, (o) => o.product.model || (o.product.category === 'table' ? 'Unspecified' : cap(o.product.category))), { valueLabel: (r) => `${r.n} · ${gbpK(r.net)}` });
+    const lens = groupBy(list, lengthBand); lens.sort((a, b) => LENGTH_ORDER.indexOf(a.label) - LENGTH_ORDER.indexOf(b.label));
+    hBars($('#chartLength'), lens, { valueLabel: (r) => `${r.n}` });
+    hBars($('#chartRegion'), groupBy(list, (o) => o.place.region), { valueLabel: (r) => `${r.n} · ${gbpK(r.net)}`, maxRows: 10 });
+    hBars($('#chartFinish'), groupBy(list, (o) => o.product.finish), { valueLabel: (r) => `${r.n}` });
+    const prices = groupBy(list, priceBand); prices.sort((a, b) => PRICE_ORDER.indexOf(a.label) - PRICE_ORDER.indexOf(b.label));
+    hBars($('#chartPrice'), prices, { valueLabel: (r) => `${r.n}` });
+    // brand comparison
+    const rows = ['lumbr', 'tmf'].map((b) => {
+      const l = list.filter((o) => o.brand === b);
+      const net = sum(l, (o) => o.net);
+      const lens = l.map((o) => o.product.length).filter(Boolean);
+      const avgLen = lens.length ? Math.round(lens.reduce((a, c) => a + c, 0) / lens.length) : null;
+      const topModel = groupBy(l, (o) => o.product.model)[0];
+      return { b, n: l.length, net, aov: l.length ? net / l.length : 0, avgLen, topModel: topModel ? `${topModel.label} (${topModel.n})` : '—', live: l.filter((o) => o.status !== 'delivered').length };
+    });
+    $('#brandCompare').innerHTML = `<table style="min-width:0;width:100%"><thead><tr><th></th>${rows.map((r) => `<th class="num" style="position:static"><span class="chip ${r.b}">${BRAND[r.b]}</span></th>`).join('')}</tr></thead><tbody>
+      <tr><td>Orders</td>${rows.map((r) => `<td class="num">${r.n}</td>`).join('')}</tr>
+      <tr><td>Net revenue</td>${rows.map((r) => `<td class="num">${gbp(r.net)}</td>`).join('')}</tr>
+      <tr><td>Average order</td>${rows.map((r) => `<td class="num">${gbp(r.aov)}</td>`).join('')}</tr>
+      <tr><td>Share of revenue</td>${rows.map((r) => `<td class="num">${sum(list, (o) => o.net) ? Math.round((r.net / sum(list, (o) => o.net)) * 100) : 0}%</td>`).join('')}</tr>
+      <tr><td>Average table length</td>${rows.map((r) => `<td class="num">${r.avgLen ? r.avgLen + 'cm' : '—'}</td>`).join('')}</tr>
+      <tr><td>Most ordered style</td>${rows.map((r) => `<td class="num">${esc(r.topModel)}</td>`).join('')}</tr>
+      <tr><td>Still in production</td>${rows.map((r) => `<td class="num">${r.live}</td>`).join('')}</tr>
+    </tbody></table>`;
+  }
+  function cap(s) { return s ? s[0].toUpperCase() + s.slice(1) : s; }
+
+  // ---------- table ----------
+  const COLS = [
+    { key: 'date', label: 'Date', cls: 'date', get: (o) => o.date, fmt: (o) => fmtDate(o.date) },
+    { key: 'brand', label: 'Brand', get: (o) => o.brand, fmt: (o) => `<span class="chip ${o.brand}">${BRAND[o.brand]}</span>` },
+    { key: 'number', label: 'Order', cls: 'mono', get: (o) => o.number, fmt: (o) => esc(o.number) },
+    ...(FEED.includeNames ? [{ key: 'customer', label: 'Customer', get: (o) => o.customer, fmt: (o) => esc(o.customer) }] : []),
+    { key: 'product', label: 'Product', cls: 'prod', get: (o) => o.productTitle, fmt: (o) => `<div class="t">${esc(o.productTitle || '—')}</div>${o.items.length > 1 ? `<div class="m">+ ${o.items.length - 1} more line${o.items.length > 2 ? 's' : ''}</div>` : ''}` },
+    { key: 'size', label: 'Size', get: (o) => o.product.length || 0, fmt: (o) => o.product.length ? `${o.product.length}${o.product.width ? '×' + o.product.width : ''}cm` : '—' },
+    { key: 'spec', label: 'Spec', get: (o) => o.product.finish || '', fmt: (o) => esc([o.product.model, o.product.finish && `${o.product.finish} finish`, o.product.colour, o.product.thickness && `${o.product.thickness}mm`, o.product.bench && `bench: ${o.product.bench}`].filter(Boolean).join(' · ')) || '—' },
+    { key: 'region', label: 'Region', get: (o) => o.place.region, fmt: (o) => `${esc(o.place.town)}${o.place.town ? ' · ' : ''}<span style="color:var(--muted)">${esc(o.place.region)}</span>` },
+    { key: 'net', label: 'Net £', cls: 'num', get: (o) => o.net, fmt: (o) => gbp(o.net) },
+    { key: 'gross', label: 'Gross £', cls: 'num', get: (o) => o.gross, fmt: (o) => gbp(o.gross) },
+    { key: 'payment', label: 'Payment', get: (o) => o.payment, fmt: (o) => `<span class="pill ${o.payment}">${esc(o.paymentLabel)}</span>` },
+    { key: 'status', label: 'Status', get: (o) => o.status, fmt: (o) => `<span class="pill ${o.status}">${o.status === 'in_stock' ? 'In stock' : o.status === 'delivered' ? 'Delivered' : 'In production'}</span>` },
+    { key: 'ageDays', label: 'Age', cls: 'num', get: (o) => o.ageDays, fmt: (o) => o.ageDays < 7 ? `${o.ageDays}d` : `${Math.floor(o.ageDays / 7)}w ${o.ageDays % 7}d` },
+  ];
+  function renderTable(list) {
+    const { key, dir } = state.sort;
+    const col = COLS.find((c) => c.key === key) || COLS[0];
+    const sorted = [...list].sort((a, b) => { const x = col.get(a), y = col.get(b); const r = typeof x === 'number' ? x - y : String(x).localeCompare(String(y)); return dir === 'asc' ? r : -r; });
+    $('#thead').innerHTML = COLS.map((c) => `<th class="${c.cls === 'num' ? 'num' : ''} ${c.key === key ? 'sorted' : ''}" data-sort="${c.key}" scope="col">${esc(c.label)}${c.key === key ? `<span class="arrow">${dir === 'asc' ? '↑' : '↓'}</span>` : ''}</th>`).join('');
+    $('#tbody').innerHTML = sorted.map((o) => `
+      <tr class="row ${state.open.has(o.key) ? 'open' : ''}" data-key="${esc(o.key)}" tabindex="0">${COLS.map((c) => `<td class="${c.cls || ''}">${c.fmt(o)}</td>`).join('')}</tr>
+      ${state.open.has(o.key) ? `<tr class="detail"><td colspan="${COLS.length}">${detailHtml(o)}</td></tr>` : ''}`).join('') || `<tr><td colspan="${COLS.length}" class="empty">No orders match.</td></tr>`;
+    $('#count').textContent = `${sorted.length} order${sorted.length === 1 ? '' : 's'} · ${gbp(sum(sorted, (o) => o.net))} net`;
+  }
+  function detailHtml(o) {
+    const p = o.product;
+    return `<div class="dgrid">
+      <div><dl>
+        <dt>Line items</dt><dd><ul>${o.items.map((i) => `<li>${esc(i.title)}${i.qty > 1 ? ` ×${i.qty}` : ''}${i.parsed.category !== 'table' ? ` <small>(${esc(i.parsed.category)})</small>` : ''}</li>`).join('')}</ul></dd>
+        ${o.reference ? `<dt>Reference</dt><dd>${esc(o.reference)}</dd>` : ''}
+        ${o.tags && o.tags.length ? `<dt>Tags</dt><dd>${o.tags.map(esc).join(', ')}</dd>` : ''}
+      </dl></div>
+      <div><dl>
+        <dt>Style</dt><dd>${esc(p.model || '—')}${p.category !== 'table' ? ` <small style="color:var(--muted)">(${esc(p.category)})</small>` : ''}</dd>
+        <dt>Size</dt><dd>${p.length ? `${p.length}cm long${p.width ? ` × ${p.width}cm wide` : ''}` : '—'}${p.thickness ? ` · ${p.thickness}mm top` : ''}</dd>
+        <dt>Finish</dt><dd>${esc(p.finish || '—')}${p.colour ? ` · base ${esc(p.colour)}` : ''}</dd>
+        <dt>Breadboard ends</dt><dd>${p.breadboard === null ? '—' : p.breadboard ? 'Yes' : 'No'}</dd>
+        <dt>Benches</dt><dd>${esc(p.bench || 'None')}</dd>
+        <dt>Money</dt><dd>${gbp(o.net)} net · ${gbp(o.gross)} gross · VAT ${gbp(o.tax)}${o.shipping ? ` · delivery ${gbp(o.shipping)}` : ''}${o.outstanding > 0 ? ` · <b>${gbp(o.outstanding)} outstanding</b>` : ''}</dd>
+        <dt>Location</dt><dd>${esc([o.place.town, o.place.outcode, o.place.region].filter(Boolean).join(' · '))}</dd>
+        <dt>Ordered</dt><dd>${fmtDateY(o.date)} · ${o.ageDays} days ago · ${o.source === 'shopify' ? 'lumbr.uk (Shopify)' : 'tommarshfurniture (Sage invoice)'}</dd>
+      </dl></div>
+    </div>`;
+  }
+
+  // ---------- CSV ----------
+  function csv(list) {
+    const cols = ['date', 'brand', 'number', 'reference', ...(FEED.includeNames ? ['customer'] : []), 'product', 'style', 'length_cm', 'width_cm', 'finish', 'colour', 'thickness_mm', 'breadboard', 'bench', 'town', 'outcode', 'region', 'net', 'gross', 'vat', 'delivery', 'payment', 'status', 'age_days'];
+    const q = (v) => { const s = String(v ?? ''); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+    const rows = list.map((o) => [o.date, BRAND[o.brand], o.number, o.reference, ...(FEED.includeNames ? [o.customer] : []), o.productTitle, o.product.model, o.product.length, o.product.width, o.product.finish, o.product.colour, o.product.thickness, o.product.breadboard === null ? '' : o.product.breadboard ? 'yes' : 'no', o.product.bench, o.place.town, o.place.outcode, o.place.region, o.net, o.gross, o.tax, o.shipping, o.paymentLabel, o.status, o.ageDays].map(q).join(','));
+    return [cols.join(','), ...rows].join('\n');
+  }
+
+  // ---------- render ----------
+  function renderAll() {
+    const list = filtered({ ignoreQ: true });
+    renderKpis(list);
+    renderCharts(list);
+    renderTable(filtered());
+  }
+
+  // ---------- events ----------
+  $$('.seg[data-filter]').forEach((seg) => seg.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-value]'); if (!btn) return;
+    $$('button', seg).forEach((b) => b.classList.toggle('on', b === btn));
+    state[seg.dataset.filter] = btn.dataset.value;
+    renderAll();
+  }));
+  let qt; $('#q').addEventListener('input', (e) => { clearTimeout(qt); qt = setTimeout(() => { state.q = e.target.value; renderTable(filtered()); }, 120); });
+  $('#thead').addEventListener('click', (e) => {
+    const th = e.target.closest('th[data-sort]'); if (!th) return;
+    const k = th.dataset.sort;
+    state.sort = { key: k, dir: state.sort.key === k && state.sort.dir === 'desc' ? 'asc' : 'desc' };
+    renderTable(filtered());
+  });
+  $('#tbody').addEventListener('click', (e) => {
+    const tr = e.target.closest('tr.row'); if (!tr) return;
+    const k = tr.dataset.key;
+    if (state.open.has(k)) state.open.delete(k); else state.open.add(k);
+    renderTable(filtered());
+  });
+  $('#tbody').addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr.row')) { e.preventDefault(); e.target.click(); } });
+  $('#csv').addEventListener('click', async () => {
+    const btn = $('#csv');
+    try { await navigator.clipboard.writeText(csv(filtered())); btn.textContent = 'Copied'; } catch { btn.textContent = 'Copy failed'; }
+    setTimeout(() => { btn.textContent = 'Copy CSV'; }, 1500);
+  });
+
+  $('#foot').innerHTML = `Orders come straight from lumbr.uk (Shopify) and the Tom Marsh Furniture invoices in Sage, refreshed automatically. Net is ex VAT and includes any delivery charge. Sizes, finishes and styles are read from the product spec on each order, so an unusual description can show as "Unspecified". ${FEED.includeNames ? '' : 'Customer contact details are not included in this view.'}`;
+  renderAll();
+})();
+</script>
+</body>
+</html>
